@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -26,6 +27,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     private final UserRepository repository;
     private final RoleRepository roleRepository;
     private final UserPersistenceMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<User> findById(Long id) {
@@ -65,7 +67,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         // Convertimos el objeto de usuario de dominio(User user) a una entidad de usuario
         UserEntity userEntity = mapper.toUserEntity(user);
         userEntity.setRoles(roleEntities); // Asignar las entidades de roles al usuario
-
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         // Guardar el usuario en la base de datos
         UserEntity savedUserEntity = repository.save(userEntity);
 
@@ -103,7 +105,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         // Convertimos el objeto de usuario de dominio(User user) a una entidad de usuario
         UserEntity userEntity = mapper.toUserEntity(user);
         userEntity.setRoles(roleEntities); // Asignar las entidades de roles al usuario
-
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         // Guardar el usuario en la base de datos
         UserEntity savedUserEntity = repository.save(userEntity);
 
