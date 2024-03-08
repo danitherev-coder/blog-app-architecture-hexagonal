@@ -1,4 +1,4 @@
-package com.dani.roles.infrastructure.adapters.input.rest;
+package com.dani.roles.infrastructure.adapters.input.rest.Controllers.Admin;
 
 import com.dani.roles.application.ports.input.PostServicePort;
 import com.dani.roles.infrastructure.adapters.input.rest.mapper.PostRestMapper;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/api/v1/admin/posts")
 @RequiredArgsConstructor
-public class PostRestController {
+public class AdminPostRestController {
     private final PostServicePort servicePort;
     private final PostRestMapper restMapper;
 

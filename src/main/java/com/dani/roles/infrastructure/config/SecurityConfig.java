@@ -2,6 +2,7 @@ package com.dani.roles.infrastructure.config;
 
 import com.dani.roles.infrastructure.config.filters.JwtAuthenticationFilter;
 import com.dani.roles.infrastructure.config.service.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,10 +26,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -41,7 +42,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/posts/*").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/categories/*").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll();
+                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").permitAll();
+                    auth.requestMatchers("/api/v1/admin/*").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

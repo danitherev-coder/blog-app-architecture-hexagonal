@@ -1,5 +1,6 @@
 package com.dani.roles.GlobalErrors;
 
+import com.dani.roles.domain.exception.LoginException;
 import com.dani.roles.domain.exception.UnauthorizedAccessException;
 import com.dani.roles.domain.exception.UserNotFoundException;
 import com.dani.roles.domain.model.ErrorResponse;
@@ -22,10 +23,20 @@ import static com.dani.roles.utils.ErrorCategorizado.*;
 public class GlobalControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserNotFoundException() {
+    public ErrorResponse handleUserNotFoundException(UserNotFoundException ex) {
         return ErrorResponse.builder()
                 .code(USER_NOT_FOUND.getCode())
-                .message(USER_NOT_FOUND.getMessage())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(LoginException.class)
+    public ErrorResponse handleLoginException(LoginException ex) {
+        return ErrorResponse.builder()
+                .code("LOGIN_ERROR_CREDENTIALS")
+                .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
     }

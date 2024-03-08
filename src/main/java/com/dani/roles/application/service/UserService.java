@@ -5,6 +5,7 @@ import com.dani.roles.application.ports.output.UserPersistencePort;
 import com.dani.roles.domain.exception.UserNotFoundException;
 import com.dani.roles.domain.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class UserService implements UserServicePort {
 
     private final UserPersistencePort persistencePort;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User findById(Long id) {
@@ -27,6 +29,7 @@ public class UserService implements UserServicePort {
 
     @Override
     public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return persistencePort.save(user);
     }
 
@@ -44,7 +47,7 @@ public class UserService implements UserServicePort {
                     savedUser.setEmail(user.getEmail());
                     savedUser.setUsername(user.getUsername());
                     savedUser.setImage(user.getImage());
-                    savedUser.setPassword(user.getPassword());
+                    savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
                     savedUser.setRoleIds(user.getRoleIds());
                     return persistencePort.update(id, savedUser);
 

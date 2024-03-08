@@ -1,4 +1,4 @@
-package com.dani.roles.infrastructure.adapters.input.rest;
+package com.dani.roles.infrastructure.adapters.input.rest.Controllers.Users;
 
 import com.dani.roles.application.ports.input.UserServicePort;
 import com.dani.roles.infrastructure.adapters.input.rest.mapper.UserRestMapper;
@@ -7,10 +7,8 @@ import com.dani.roles.infrastructure.adapters.input.rest.model.response.UserResp
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,12 +30,6 @@ public class UserRestController {
         return restMapper.toUserCreateRequest(servicePort.findById(id));
     }
 
-
-    @PostMapping(value = "/")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse save(@RequestBody @Valid UserCreateRequest request) {
-        return restMapper.toUserCreateRequest(servicePort.save(restMapper.toUser(request)));
-    }
 
     @PutMapping("/{id}")
     public UserResponse update(@PathVariable Long id, @RequestBody @Valid UserCreateRequest request){
