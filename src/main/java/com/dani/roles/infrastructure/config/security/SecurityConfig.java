@@ -1,26 +1,21 @@
-package com.dani.roles.infrastructure.config;
+package com.dani.roles.infrastructure.config.security;
 
-import com.dani.roles.infrastructure.config.filters.JwtAuthenticationFilter;
-import com.dani.roles.infrastructure.config.service.UserDetailsServiceImpl;
+import com.dani.roles.infrastructure.config.security.filters.JwtAuthenticationEntryPoint;
+import com.dani.roles.infrastructure.config.security.filters.JwtAuthenticationFilter;
+import com.dani.roles.infrastructure.config.security.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -40,11 +36,11 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(authJwt -> authJwt.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/posts/*").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/categories/*").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll();
-                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").permitAll();
+                    auth.requestMatchers("/api/v1/auth/**").permitAll();
                     auth.requestMatchers("/api/v1/admin/*").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })

@@ -19,8 +19,6 @@ public class PostCreateRequest {
     private String content;
     @NotBlank(message = "La portada no puede estar vacia")
     private String cover;
-    @NotNull(message = "El autor no puede estar vacio")
-    private Long authorId;
     @NotNull(message = "La categoria no puede estar vacia")
     private Long catIds;
 }

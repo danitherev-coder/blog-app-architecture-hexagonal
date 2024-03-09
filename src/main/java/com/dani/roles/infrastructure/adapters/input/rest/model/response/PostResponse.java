@@ -13,4 +13,5 @@ public class PostResponse {
     private String description;
     private String content;
     private String cover;
+    private UserResponse user;
 }

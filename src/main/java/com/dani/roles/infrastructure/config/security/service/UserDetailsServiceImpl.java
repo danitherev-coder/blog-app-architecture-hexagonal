@@ -1,4 +1,4 @@
-package com.dani.roles.infrastructure.config.service;
+package com.dani.roles.infrastructure.config.security.service;
 
 import com.dani.roles.application.service.UserService;
 import com.dani.roles.infrastructure.adapters.output.persistence.entities.RoleEntity;

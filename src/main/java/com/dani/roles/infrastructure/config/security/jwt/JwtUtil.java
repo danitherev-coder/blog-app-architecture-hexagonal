@@ -1,4 +1,4 @@
-package com.dani.roles.infrastructure.config.jwt;
+package com.dani.roles.infrastructure.config.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

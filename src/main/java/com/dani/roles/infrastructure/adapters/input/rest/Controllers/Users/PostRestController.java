@@ -59,7 +59,7 @@ public class PostRestController {
     @ResponseStatus(HttpStatus.OK)
     public PostResponse update(@PathVariable Long id, @RequestBody @Valid PostCreateRequest request){
         // obtener los datos del author y categorias
-        System.out.println("request user id: " + request.getAuthorId());
+        //System.out.println("request user id: " + request.getAuthorId());
         System.out.println("request category id: " + request.getCatIds());
 
         return restMapper.toPostCreateRequest(servicePort.update(id, restMapper.toPost(request)));

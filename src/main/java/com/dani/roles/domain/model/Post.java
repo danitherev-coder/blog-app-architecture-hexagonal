@@ -13,6 +13,6 @@ public class Post {
     private String description;
     private String content;
     private String cover;
-    private Long authorId;
     private Long catIds;
+    private User user;
 }

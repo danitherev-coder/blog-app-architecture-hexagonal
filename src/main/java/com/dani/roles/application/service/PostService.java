@@ -40,7 +40,6 @@ public class PostService implements PostServicePort {
                     savedPost.setContent(post.getContent());
                     savedPost.setCover(post.getCover());
                     savedPost.setCatIds(post.getCatIds());
-                    savedPost.setAuthorId(post.getAuthorId());
                     return persistencePort.update(id, savedPost);
                 })
                 .orElseThrow(()-> new EntityNotFoundException("Post with ID " + id + " not found"));

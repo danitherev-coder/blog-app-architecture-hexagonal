@@ -8,4 +8,8 @@ import java.util.Map;
 public interface LoginAndRegisterServicePort {
     User register(User user);
    Login login(Login login);
+
+   void resetPassword(String email);
+   void verifyToken(String token);
+   void changePassword(String password,String token);
 }

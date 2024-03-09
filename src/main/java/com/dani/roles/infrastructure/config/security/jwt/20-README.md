@@ -113,7 +113,7 @@ Y crearemos 2 clases
 package com.dani.roles.infrastructure.config.filters;
 
 import com.dani.roles.infrastructure.adapters.output.persistence.entities.UserEntity;
-import com.dani.roles.infrastructure.config.jwt.JwtUtil;
+import com.dani.roles.infrastructure.config.security.jwt.JwtUtil;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -121,7 +121,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

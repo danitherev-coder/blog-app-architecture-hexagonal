@@ -7,6 +7,8 @@ import com.dani.roles.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,21 @@ public class LoginAndRegisterService implements LoginAndRegisterServicePort {
     @Override
     public Login login(Login login) {
         return persistencePort.login(login);
+    }
+
+    @Override
+    public void resetPassword(String email) {
+         persistencePort.resetPassword(email);
+    }
+
+    @Override
+    public void verifyToken(String token) {
+        persistencePort.verifyToken(token);
+    }
+
+    @Override
+    public void changePassword(String password,String token) {
+        persistencePort.changePassword(password,token);
     }
 
 }

@@ -1,8 +1,8 @@
-package com.dani.roles.infrastructure.config.filters;
+package com.dani.roles.infrastructure.config.security.filters;
 
 
-import com.dani.roles.infrastructure.config.jwt.JwtUtil;
-import com.dani.roles.infrastructure.config.service.UserDetailsServiceImpl;
+import com.dani.roles.infrastructure.config.security.jwt.JwtUtil;
+import com.dani.roles.infrastructure.config.security.service.UserDetailsServiceImpl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String obtenerJwtDeLaSolicitud(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
 
             return bearerToken.substring(7);
         }

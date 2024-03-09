@@ -4,31 +4,19 @@ package com.dani.roles.infrastructure.adapters.input.rest;
 import com.dani.roles.application.ports.input.LoginAndRegisterServicePort;
 import com.dani.roles.infrastructure.adapters.input.rest.mapper.LoginAndRegisterRestMapper;
 import com.dani.roles.infrastructure.adapters.input.rest.mapper.UserRestMapper;
+import com.dani.roles.infrastructure.adapters.input.rest.model.request.ChangePassword;
+import com.dani.roles.infrastructure.adapters.input.rest.model.request.EmailCreateRequest;
 import com.dani.roles.infrastructure.adapters.input.rest.model.request.LoginCreateRequest;
 import com.dani.roles.infrastructure.adapters.input.rest.model.request.UserCreateRequest;
+import com.dani.roles.infrastructure.adapters.input.rest.model.response.EmailSendingResponse;
 import com.dani.roles.infrastructure.adapters.input.rest.model.response.JwtAuthResponseDto;
-import com.dani.roles.infrastructure.adapters.output.persistence.entities.RoleEntity;
-import com.dani.roles.infrastructure.adapters.output.persistence.entities.UserEntity;
-import com.dani.roles.infrastructure.adapters.output.persistence.repositories.RoleRepository;
-import com.dani.roles.infrastructure.adapters.output.persistence.repositories.UserRepository;
-import com.dani.roles.infrastructure.config.jwt.JwtUtil;
+import com.dani.roles.infrastructure.adapters.input.rest.model.response.UserResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -46,9 +34,27 @@ public class AuthRestController {
 
     @Transactional
     @PostMapping("/signup")
-    public ResponseEntity<?> registrarUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse save(@RequestBody @Valid UserCreateRequest request) {
+        return restMapper.toUserCreateRequest(servicePort.register(restMapper.toUser(request)));
+    }
 
-        return ResponseEntity.ok(servicePort.register(restMapper.toUser(userCreateRequest)));
+    @PostMapping("/reset-password")
+    public EmailSendingResponse resetPassword(@RequestBody @Valid EmailCreateRequest request) {
+        servicePort.resetPassword(request.getEmail());
+        return new EmailSendingResponse("Email enviado correctamente");
+    }
+
+    @GetMapping("/verify/{token}")
+    public RedirectView verifyToken(@PathVariable String token) {
+        servicePort.verifyToken(token);
+        return new RedirectView("http://localhost:8080/api/v1/auth/change-password/" + token);
+    }
+
+    @PostMapping("/change-password/{token}")
+    public EmailSendingResponse changePassword(@RequestBody @Valid ChangePassword request, @PathVariable String token) {
+        servicePort.changePassword(request.getPassword(), token);
+        return new EmailSendingResponse("Contraseña cambiada correctamente");
     }
 
 }
