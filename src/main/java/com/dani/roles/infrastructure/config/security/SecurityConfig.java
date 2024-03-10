@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(authJwt -> authJwt.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(HttpMethod.GET, "/api/v1/posts/*").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/categories/*").permitAll();
                     auth.requestMatchers("/api/v1/auth/**").permitAll();
                     auth.requestMatchers("/api/v1/admin/*").hasRole("ADMIN");

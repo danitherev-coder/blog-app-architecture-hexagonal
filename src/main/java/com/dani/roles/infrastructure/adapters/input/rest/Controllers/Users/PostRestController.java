@@ -31,27 +31,21 @@ public class PostRestController {
         return restMapper.toPostCreateRequest(servicePort.findById(id));
     }
 
-    /*
     @GetMapping("/user/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByUserId(Long id){
+    public List<PostResponse> findByUserId(@PathVariable Long id){
         return restMapper.toPostResponseList(servicePort.findByUserId(id));
     }
-     */
-    /*
+
     @GetMapping("/category/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByCategoryId(Long id){
+    public List<PostResponse> findByCategoryId(@PathVariable Long id){
         return restMapper.toPostResponseList(servicePort.findByCategoryId(id));
     }
-     */
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public PostResponse save(@RequestBody @Valid PostCreateRequest request){
-
-
-
         return restMapper.toPostCreateRequest(servicePort.save(restMapper.toPost(request)));
     }
 

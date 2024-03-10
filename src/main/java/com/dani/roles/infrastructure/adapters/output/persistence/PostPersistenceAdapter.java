@@ -70,6 +70,47 @@ public class PostPersistenceAdapter implements PostPersistencePort {
         return posts;
     }
 
+    @Override
+    public List<Post> findByUserId(Long id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
+        List<PostEntity> postEntities = repository.findByAuthor(userEntity);
+        List<Post> posts = new ArrayList<>();
+
+        for (PostEntity postEntity : postEntities) {
+            // Mapear PostEntity a Post
+            Post post = mapper.toPost(postEntity);
+            // Establecer el usuario mapeado en la publicación
+            post.setUser(userMapper.toUser(userEntity));
+            // Agregar la publicación a la lista
+            posts.add(post);
+        }
+        return posts;
+    }
+
+    @Override
+    public List<Post> findByCategoryId(Long id) {
+        CategoryEntity categoryEntity = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category with ID " + id + " not found"));
+        List<PostEntity> postEntities = repository.findByCategory(categoryEntity);
+        List<Post> posts = new ArrayList<>();
+
+        for (PostEntity postEntity : postEntities) {
+            // Obtener el usuario asociado con cada publicación
+            UserEntity userEntity = postEntity.getAuthor();
+            // Mapear UserEntity a User
+            User user = userMapper.toUser(userEntity);
+            // Mapear PostEntity a Post
+            Post post = mapper.toPost(postEntity);
+            // Establecer el usuario mapeado en la publicación
+            post.setUser(user);
+            // Agregar la publicación a la lista
+            posts.add(post);
+        }
+
+        return posts;
+    }
+
 
     @Override
     public Post save(Post post) {

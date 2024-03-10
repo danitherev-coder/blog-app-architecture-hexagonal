@@ -27,6 +27,16 @@ public class PostService implements PostServicePort {
     }
 
     @Override
+    public List<Post> findByUserId(Long id) {
+        return persistencePort.findByUserId(id);
+    }
+
+    @Override
+    public List<Post> findByCategoryId(Long id) {
+        return persistencePort.findByCategoryId(id);
+    }
+
+    @Override
     public Post save(Post post) {
         return persistencePort.save(post);
     }
