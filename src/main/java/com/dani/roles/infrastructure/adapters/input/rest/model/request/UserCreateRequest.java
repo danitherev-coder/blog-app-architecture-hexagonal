@@ -1,13 +1,8 @@
 package com.dani.roles.infrastructure.adapters.input.rest.model.request;
 
-import com.dani.roles.domain.model.Role;
-import com.dani.roles.infrastructure.adapters.output.persistence.entities.RoleEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-
-import java.util.List;
 import java.util.Set;
 
 @Builder

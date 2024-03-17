@@ -45,7 +45,7 @@ public class CategoryPersistenceAdapter implements CategoryPersistencePort {
     @Override
     public Category update(Long id, Category category) {
         Category existCat = this.findById(id).orElseThrow(() -> new EntityNotFoundException("Category with ID " + id + " not found"));
-        CategoryEntity existCatName = repository.findByName(category.getName());
+        CategoryEntity existCatName = repository.findByName(existCat.getName());
 
         if (existCatName != null && !existCatName.getId().equals(id)) {
             throw new DuplicateKeyException("Category: " + category.getName() + " already exists");

@@ -1,6 +1,5 @@
 package com.dani.roles.infrastructure.config.security.service;
 
-import com.dani.roles.application.service.UserService;
 import com.dani.roles.infrastructure.adapters.output.persistence.entities.RoleEntity;
 import com.dani.roles.infrastructure.adapters.output.persistence.entities.UserEntity;
 import com.dani.roles.infrastructure.adapters.output.persistence.repositories.UserRepository;
@@ -11,7 +10,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

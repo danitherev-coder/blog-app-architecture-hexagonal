@@ -66,8 +66,7 @@ public class LoginAndRegisterPersistenceAdapter implements LoginAndRegisterPersi
 
     @Override
     public Login login(Login login) {
-        try {
-            // autenticar el usuario
+        try {            
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 

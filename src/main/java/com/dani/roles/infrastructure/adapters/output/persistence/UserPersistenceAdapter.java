@@ -1,7 +1,6 @@
 package com.dani.roles.infrastructure.adapters.output.persistence;
 
 import com.dani.roles.application.ports.output.UserPersistencePort;
-import com.dani.roles.domain.model.Role;
 import com.dani.roles.domain.model.User;
 import com.dani.roles.infrastructure.adapters.output.persistence.entities.RoleEntity;
 import com.dani.roles.infrastructure.adapters.output.persistence.entities.UserEntity;
@@ -53,69 +52,55 @@ public class UserPersistenceAdapter implements UserPersistencePort {
             throw new DuplicateKeyException("Email: "+ user.getEmail() + " already exists");
         }
 
-        // Set de roles permite que no se repitan los roles
         Set<RoleEntity> roleEntities = new HashSet<>();
-        // Buscar los roles en la base de datos obtenidos por el user
         for (Long roleId : user.getRoleIds()) {
-            // Buscar el rol por ID gracias al rolerepository, si no encuentra, lanza una excepcion
+
             RoleEntity roleEntity = roleRepository.findById(roleId)
                     .orElseThrow(() -> new EntityNotFoundException("Role with ID " + roleId + " not found"));
-            // finalmente agregamos el rol a la lista de roles
+
             roleEntities.add(roleEntity);
         }
 
-        // Convertimos el objeto de usuario de dominio(User user) a una entidad de usuario
         UserEntity userEntity = mapper.toUserEntity(user);
-        userEntity.setRoles(roleEntities); // Asignar las entidades de roles al usuario
+        userEntity.setRoles(roleEntities);
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Guardar el usuario en la base de datos
+        
         UserEntity savedUserEntity = repository.save(userEntity);
-
-        // Convertir la entidad de usuario guardada a un objeto de usuario de dominio y devolverlo
+        
         return mapper.toUser(savedUserEntity);
     }
 
     @Override
     public User update(Long id, User user) {
         UserEntity existingUser = repository.findById(user.getId()).orElseThrow(EntityNotFoundException::new);
-
-        // Verificar si existe un usuario con el mismo nombre de usuario pero diferente ID
+        
         UserEntity existingUsername = repository.findByUsername(user.getUsername());
         if (existingUsername != null && (existingUser == null || !existingUser.getUsername().equals(user.getUsername()))) {
             throw new DuplicateKeyException("Username: " + user.getUsername() + " already exists");
         }
-
-        // Verificar si existe un usuario con el mismo correo electrónico pero diferente ID
+        
         UserEntity existingEmail = repository.findByEmail(user.getEmail());
         if (existingEmail != null && (existingUser == null || !existingUser.getEmail().equals(user.getEmail()))) {
             throw new DuplicateKeyException("Email: " + user.getEmail() + " already exists");
         }
-
-        // Set de roles permite que no se repitan los roles
-        Set<RoleEntity> roleEntities = new HashSet<>();
-        // Buscar los roles en la base de datos obtenidos por el user
-        for (Long roleId : user.getRoleIds()) {
-            // Buscar el rol por ID gracias al rolerepository, si no encuentra, lanza una excepcion
+        
+        Set<RoleEntity> roleEntities = new HashSet<>();        
+        for (Long roleId : user.getRoleIds()) {            
             RoleEntity roleEntity = roleRepository.findById(roleId)
-                    .orElseThrow(() -> new EntityNotFoundException("Role with ID " + roleId + " not found"));
-            // finalmente agregamos el rol a la lista de roles
+                    .orElseThrow(() -> new EntityNotFoundException("Role with ID " + roleId + " not found"));            
             roleEntities.add(roleEntity);
         }
-
-        // Convertimos el objeto de usuario de dominio(User user) a una entidad de usuario
+        
         UserEntity userEntity = mapper.toUserEntity(user);
-        userEntity.setRoles(roleEntities); // Asignar las entidades de roles al usuario
-        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Guardar el usuario en la base de datos
+        userEntity.setRoles(roleEntities);
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));        
         UserEntity savedUserEntity = repository.save(userEntity);
-
-        // Convertir la entidad de usuario guardada a un objeto de usuario de dominio y devolverlo
+        
         return mapper.toUser(savedUserEntity);
     }
 
     @Override
-    public void delete(Long id) {
-        // NO buscamos si existe el usuario porque eso lo hacemos en la capa de aplicacion, aca pasamos solo el id
+    public void delete(Long id) {        
         repository.deleteById(id);
     }
 }

@@ -1,6 +1,5 @@
 package com.dani.roles.domain.model;
 
-import com.dani.roles.infrastructure.adapters.output.persistence.entities.RoleEntity;
 import lombok.*;
 
 import java.util.Set;
